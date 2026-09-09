@@ -4,6 +4,14 @@
 	(generator_version "10.0")
 	(uuid "7f1d6997-1fa5-45d0-8eee-d86ba2941caa")
 	(paper "A4")
+	(title_block
+		(title "HP 3478A Calibration RAM\\nFRAM Replacement")
+		(date "2026.09.09")
+		(rev "1")
+		(comment 1 "github.com/\\nmpb27/hp-3478a-fram")
+		(comment 2 "MB")
+		(comment 3 "MB")
+	)
 	(lib_symbols
 		(symbol "74LVC1G58_2"
 			(exclude_from_sim no)
@@ -3151,27 +3159,29 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -5.08 8.89 0)
+			(property "Reference" "U7"
+				(at -6.35 1.2701 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify right)
 				)
 			)
-			(property "Value" "MCP120-xxxxTT"
-				(at 8.89 8.89 0)
+			(property "Value" "APX803S-40SR-7"
+				(at -6.35 -1.2699 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify right)
 				)
 			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(property "Footprint" "custom_fp:SOT-23"
 				(at 15.24 -8.89 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3193,7 +3203,39 @@
 					)
 				)
 			)
-			(property "Description" "Microcontroller supervisory circuit, SOT-23"
+			(property "Description" "IC SUPERVISOR 1CH 4.0V SOT-23"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Alternate PN" "MCP120T-450I/TT"
+				(at -15.24 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "APX803S-40SR-7"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "Diodes Inc"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3240,10 +3282,10 @@
 				)
 			)
 			(symbol "MCP120-xxxxTT_1_1"
-				(pin open_collector line
-					(at 7.62 0 180)
+				(pin power_in line
+					(at 0 -10.16 90)
 					(length 2.54)
-					(name "~{RST}"
+					(name "VSS"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3258,10 +3300,10 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at 0 10.16 270)
+				(pin open_collector line
+					(at 7.62 0 180)
 					(length 2.54)
-					(name "VDD"
+					(name "~{RST}"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3277,9 +3319,9 @@
 					)
 				)
 				(pin power_in line
-					(at 0 -10.16 90)
+					(at 0 10.16 270)
 					(length 2.54)
-					(name "VSS"
+					(name "VDD"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3795,6 +3837,16 @@
 			)
 			(embedded_fonts no)
 		)
+	)
+	(text "TLV803MDBZ"
+		(exclude_from_sim no)
+		(at 274.32 158.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "442bc8c8-4131-4f91-bae4-a1e5b7f71e34")
 	)
 	(text "FRAM_CE# <= HP_CE1# OR NOT(HP_CE2 AND NOT(HP_OD XOR HP_RW))"
 		(exclude_from_sim no)
@@ -6470,7 +6522,7 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x11, script generated"
+		(property "Description" "CONN HEADER SMD 11POS 2.54MM"
 			(at 271.78 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -6503,7 +6555,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Harwin Inc."
+		(property "Manufacturer" "Harwin Inc"
 			(at 271.78 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -6702,7 +6754,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm"
+		(property "Footprint" "custom_fp:SOIC-28W_7.5x17.9mm_P1.27mm"
 			(at 152.4 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -7460,7 +7512,7 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x11, script generated"
+		(property "Description" "CONN HEADER SMD 11POS 2.54MM"
 			(at 35.56 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -7493,7 +7545,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Harwin Inc."
+		(property "Manufacturer" "Harwin Inc"
 			(at 35.56 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -8263,7 +8315,7 @@
 				)
 			)
 		)
-		(property "Description" "2x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol"
+		(property "Description" "SWITCH SLIDE DIP SPST 0.1A 6V"
 			(at 81.28 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -9766,7 +9818,6 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ea958b04-14f8-4924-9fc6-208e41cac02c")
 		(property "Reference" "U7"
 			(at 267.97 151.1299 0)
@@ -9779,7 +9830,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MCP120T-450I/TT"
+		(property "Value" "APX803L20-41SA"
 			(at 267.97 153.6699 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9790,7 +9841,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+		(property "Footprint" "custom_fp:SOT-23"
 			(at 246.38 161.29 0)
 			(hide yes)
 			(show_name no)
@@ -9812,7 +9863,7 @@
 				)
 			)
 		)
-		(property "Description" "IC SUPERVISOR 1CH 4.50V SOT-23"
+		(property "Description" "IC SUPERVISOR 1CH 4.0V SOT-23"
 			(at 261.62 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -9823,7 +9874,17 @@
 				)
 			)
 		)
-		(property "Alternate PN" "APX803S-44SR-7"
+		(property "Alternate PN" "MIC803-40D3VM3"
+			(at 276.86 156.21 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "APX803S-40SR-7"
 			(at 261.62 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -9834,18 +9895,7 @@
 				)
 			)
 		)
-		(property "MPN" "MCP120T-450I/TT"
-			(at 261.62 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Microchip Technology"
+		(property "Manufacturer" "Diodes Inc"
 			(at 261.62 152.4 0)
 			(hide yes)
 			(show_name no)

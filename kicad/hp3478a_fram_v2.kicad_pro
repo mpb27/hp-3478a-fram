@@ -98,15 +98,11 @@
           ""
         ],
         [
-          "solder_mask_bridge|84278576|37104495|2ab53fef-6b74-4446-9ed6-1c8383111347|fb7d56f2-74f7-40bd-a01c-3135ba5601ac",
+          "solder_mask_bridge|84099210|37104495|fb7d56f2-74f7-40bd-a01c-3135ba5601ac|2ab53fef-6b74-4446-9ed6-1c8383111347",
           ""
         ],
         [
-          "solder_mask_bridge|85213142|38289541|2ab53fef-6b74-4446-9ed6-1c8383111347|e38705bc-7cb4-4070-89b8-acba562ce8d3",
-          ""
-        ],
-        [
-          "solder_mask_bridge|86531785|38279876|ab2415dc-6b4a-4a79-8c6c-eb51e30ccfa3|e38705bc-7cb4-4070-89b8-acba562ce8d3",
+          "solder_mask_bridge|85296285|38290479|e38705bc-7cb4-4070-89b8-acba562ce8d3|2ab53fef-6b74-4446-9ed6-1c8383111347",
           ""
         ]
       ],
@@ -291,7 +287,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "1"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -595,7 +591,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "generated/gerbers",
       "specctra_dsn": "",
       "vrml": ""
     },
