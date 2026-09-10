@@ -14,7 +14,7 @@ The schematic, layout, and BOM are complete, but the PCB has not been verified t
 
 == Main changes
 
-* One resistor value (10k) and one capacitor value (10k) - both 0603.
+* One resistor value (10kΩ) and one capacitor value (0.1μF) - both 0603.
 * One gate IC - *74LVC1G58* for all logic - SOT-23-6.
 * Smaller size (0.70" x 1.15").
 * Voltage supervisor changed to *xxx**803*** variants with ~4V cutoff.
@@ -28,6 +28,13 @@ The schematic, layout, and BOM are complete, but the PCB has not been verified t
 == Ordering
 * US / Canada: OSHPark https://oshpark.com/shared_projects/5y6FeQE9[Order Link]
 * China: JLCPCB https://jlcpcb.com/quote[Upload Gerbers from release folder]
+
+== Future Work
+* Verify the PCB works as expected.
+* Increase resistor values to 47kΩ -- the 10kΩ resistors are overkill.
+* Add OSHW license and attribution.
+
+== Design
 
 === Schematic (Rev1)
 
