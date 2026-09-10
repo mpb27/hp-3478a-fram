@@ -2,6 +2,16 @@
 
 Yet another HP 3478A calibration RAM replacement using FRAM.
 
+[WARNING]
+====
+[.big]#*UNTESTED*#
+
+The schematic, layout, and BOM are complete, but the PCB has not been verified to work.
+
+*Status:* Awaiting PCB delivery and sourcing of parts.
+====
+
+
 == Main changes
 
 * One resistor value (10k) and one capacitor value (10k) - both 0603.
@@ -101,6 +111,3 @@ image::README.assets/image-20260909163049997.png[]
 | APX803L20-41SA
 | MIC803-40D3VM3
 |===
-
-
-
