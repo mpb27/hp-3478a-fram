@@ -1,0 +1,5 @@
+# LTspice ignore files:
+*.op.raw
+*.raw
+*.log
+
