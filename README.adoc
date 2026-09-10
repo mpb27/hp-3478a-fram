@@ -15,6 +15,10 @@ Yet another HP 3478A calibration RAM replacement using FRAM.
 * The µPD5105L RAM uses a 0.4" DIP width. Choose an appropriately sized socket if using one.
 * The 803 voltage supervisors are available in multiple pinout configurations. Carefully verify the pinout when selecting alternatives not listed.
 
+== Ordering
+* US / Canada: OSHPark https://oshpark.com/shared_projects/5y6FeQE9[Order Link]
+* China: JLCPCB https://jlcpcb.com/quote[Upload Gerbers from release folder]
+
 === Schematic (Rev1)
 
 image::README.assets/image-20260909163049997.png[]
