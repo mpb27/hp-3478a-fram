@@ -1,0 +1,204 @@
+= 74LVC1G58 Memory Control Signal Logic Design Notes
+:doctype: book
+
+https://gemini.google.com/app/7f987b6a0de9f004[https://gemini.google.com/app/7f987b6a0de9f004]
+
+==== Summary
+
+The design successfully implements the primary chip enable logic equation using three configurable 74LVC1G58 integrated circuits. By factoring the expression through De Morgan's laws - the multi-input function is broken down cleanly into modular gate operations:
+
+- Primary target equation: `oCE# <= iCE1# OR (NOT iCE2) OR (NOT(iOD XOR iRW))`
+- Rearranged target equation: `oCE# <= iCE1# OR NOT(iCE2 AND (iOD XOR iRW))`
+- Chip 1 (XOR configuration): `n1 <= iOD XOR iRW`
+- Chip 2 (NAND configuration): `n2 <= NOT(iCE2 AND n1)`
+- Chip 3 (OR configuration): `oCE# <= iCE1# OR n2`
+
+To complete the memory control interface, the write enable and output enable signals were derived using two additional 1G58 packages. An optimization trick was applied to substitute `iOD` for `NOT iRW` during the specific low states of `oCE#`, eliminating the need for an external hardware inverter and enabling standard OR gate mappings for both secondary outputs.
+
+- Secondary target equations: `oWE# <= oCE# OR iRW` and `oOE# <= oCE# OR NOT iRW` (optimized to `oOE# <= oCE# OR iOD`)
+
+- Chip 4 (OR configuration): `oWE# <= oCE# OR iRW`
+
+- Chip 5 (OR configuration): `oOE# <= oCE# OR iOD`
+
+'''
+
+
+_User prompt:_
+
+_I am designing a combinational logic circuit using 74LVC logic. The inputs to the circuit are: iCE1#, iCE2, iOD, iRW The output needs to be oCE# and has the following logic equation:_
+
+_oCE# <= iCE1# OR (NOT iCE2) OR (NOT(iOD XOR iRW))_
+
+_Please write a truth table for this equation. Also please map this equation into 74LVC1G57 or 74LVC1G58 chips which are flexible 3 input logic ICs that can be used to implement different logic primitives. Check if it is possible to map into 2 or 3 chips only and only use either 1G57 or 1G58 chips (all the same) but not both. Use "n" prefix for intermediate net names. Look up the truth tables for 1G57 and 1G58 and show them in an intermediate step as a reference. When presenting tables, please use a simple monospaced font ascii table with minimal lines._
+
+
+
+Response: To implement your combinational logic equation, let's first analyze the required boolean function, then look at the truth tables, and finally map it to the optimal configurable logic chip.
+
+=== *1. Equation Analysis & Truth Table*
+
+The equation is: `oCE# = iCE1# OR (NOT iCE2) OR (NOT(iOD XOR iRW))`
+
+Notice that `NOT(iOD XOR iRW)` is equivalent to the *XNOR* operation. The output `oCE#` is 1 if _any_ of the following are true:
+
+> * `iCE1#` is 1
+> * `iCE2` is 0
+> * `iOD` and `iRW` are the same (XNOR)
+
+Here is the truth table for the entire circuit:
+
+```
+iCE1# iCE2 iOD iRW | oCE#
+  0    0    0    0  |  1
+  0    0    0    1  |  1
+  0    0    1    0  |  1
+  0    0    1    1  |  1
+  0    1    0    0  |  1
+  0    1    0    1  |  0
+  0    1    1    0  |  0
+  0    1    1    1  |  1
+  1    0    0    0  |  1
+  1    0    0    1  |  1
+  1    0    1    0  |  1
+  1    0    1    1  |  1
+  1    1    0    0  |  1
+  1    1    0    1  |  1
+  1    1    1    0  |  1
+  1    1    1    1  |  1
+```
+
+
+
+=== *2. 74LVC1G57 & 74LVC1G58 Reference Tables*
+
+Both chips are configurable multi-function gates with 3 inputs (typically denoted as C, B, A, where C is the most significant bit).
+
+*74LVC1G57* implements `Y <= (C AND B) OR ((NOT C) AND (NOT A))`
+
+*74LVC1G58* implements `Y <= ((NOT C) AND A) OR (C AND (NOT B))`
+
+```
+1G57 Truth Table           1G58 Truth Table
+C B A | Y                  C B A | Y
+0 0 0 | 1                  0 0 0 | 0
+0 0 1 | 0                  0 0 1 | 1
+0 1 0 | 1                  0 1 0 | 0
+0 1 1 | 0                  0 1 1 | 1
+1 0 0 | 0                  1 0 0 | 1
+1 0 1 | 0                  1 0 1 | 1
+1 1 0 | 1                  1 1 0 | 0
+1 1 1 | 1                  1 1 1 | 0
+```
+
+
+
+=== *3. Hardware Mapping (Chip Count Analysis)*
+
+*Can we do this in 2 chips?* No. The full equation represents a 3-input OR logic structure (`A OR B OR C`). A 3-input OR gate produces a truth table with seven 1s and one 0. As seen in the reference tables above, both the 1G57 and 1G58 inherently output exactly four 1s and four 0s for any 3-variable combination. Because of this balance, a single chip can never implement a 3-input OR. Two chips are insufficient to combine 4 initial inputs into a final 3-input OR function without requiring at least one chip to do a 3-variable heavily-unbalanced operation natively.
+
+*Can we do this in 3 chips?* Yes. By strategically using De Morgan's laws, we can factor the equation for the *74LVC1G58*. (The 1G57 lacks a native 2-input OR without an inverted input, meaning it would take 4 chips).
+
+By rearranging the equation:
+
+`oCE# <= iCE1# OR (NOT iCE2) OR (NOT (iOD XOR iRW))`
+
+We can invert the second half to use a NAND gate:
+
+`oCE# <= iCE1# OR NOT( iCE2 AND (iOD XOR iRW) )`
+
+=== *4. Implementation Using 3x 74LVC1G58*
+
+We can map this exactly into *three 74LVC1G58 chips* by wiring their C, B, and A inputs to specific signals or constant logic levels (VCC=1, GND=0).
+
+*Chip 1: XOR Gate* We generate intermediate net `n1 <= iOD XOR iRW`. By tying inputs A and B together, the 1G58 acts as an XOR gate.
+
+> * *Input C:* iOD
+> * *Input B:* iRW
+> * *Input A:* iRW
+> * *Output Y:* n1 *(n1 = iOD XOR iRW)*
+
+*Chip 2: NAND Gate* We generate intermediate net `n2 <= NOT(iCE2 AND n1)`. Tying input A to VCC configures the 1G58 as a NAND gate.
+
+> * *Input C:* iCE2
+> * *Input B:* n1
+> * *Input A:* 1 (VCC)
+> * *Output Y:* n2 *(n2 = NOT iCE2 OR NOT n1)*
+
+*Chip 3: OR Gate* We generate the final output `oCE# <= iCE1# OR n2`. Tying input B to GND configures the 1G58 as a 2-input OR gate.
+
+> * *Input C:* iCE1#
+> * *Input B:* 0 (GND)
+> * *Input A:* n2
+> * *Output Y:* oCE#
+
+This exactly yields `iCE1# OR (NOT iCE2) OR (NOT n1)`, solving your equation with three identical 74LVC1G58 packages.
+
+'''
+
+_User prompt:_
+
+_We also need to produce the following signals:_
+
+_oWE# <= oCE# OR iRW_
+
+_oOE# <= oCE# OR NOT iRW_
+
+_Can we do this using only 2 more 1G58 chips?_
+
+
+
+Response: Yes, we can accomplish this using exactly *2 more 74LVC1G58 chips* (bringing the total to 5 chips).
+
+At first glance, generating `oOE#` looks like it requires an extra inverter because the 74LVC1G58 cannot natively perform a 2-input OR gate with an inverted input (i.e., `A OR (NOT B)`) without taking up multiple chips.
+
+However, we can exploit a clever Boolean relationship based on the conditions where `oCE#` is 0.
+
+=== *The Boolean Trick for oOE#*
+
+We want to generate: `oOE# <= oCE# OR (NOT iRW)`
+
+Notice that `oCE#` is only ever 0 when *all* of these conditions are met simultaneously:
+
+> 1. `iCE1#` is 0
+> 2. `iCE2` is 1
+> 3. `iOD` and `iRW` are different (meaning `iOD <= NOT iRW`)
+
+Because `oOE#` is an OR gate, if `oCE#` is 1, the output is already 1 regardless of the second term. We _only_ care about the second term when `oCE#` is 0. Since we established that whenever `oCE#` is 0, `iOD` is strictly equal to `NOT iRW`, we can seamlessly substitute `iOD` in place of `NOT iRW`!
+
+> * Original: `oOE# <= oCE# OR (NOT iRW) `
+> * Optimized: `oOE# <= oCE# OR iOD`
+
+Here is a partial truth table proving this substitution works for the only two states where `oCE# = 0`:
+
+```
+iCE1# iCE2 iOD iRW | oCE# | NOT iRW | Target oOE# | Optimized (oCE# OR iOD)
+  0    1    0    1  |  0   |    0    |      0      |       0
+  0    1    1    0  |  0   |    1    |      1      |       1
+```
+
+_(For all other 14 input combinations, `oCE#` is 1, so both the target and optimized equations evaluate to 1)_
+
+=== *Hardware Mapping (Chips 4 & 5)*
+
+Thanks to the substitution above, both `oWE#` and `oOE#` are now standard 2-input OR gates (`oCE# OR iRW` and `oCE# OR iOD`).
+
+As established previously, we can configure a 74LVC1G58 as a 2-input OR gate by tying input B to GND (0).
+
+*Chip 4: oWE# Gate* (Implements `oCE# OR iRW`)
+
+> * *Input C:* oCE#
+> * *Input B:* 0 (GND)
+> * *Input A:* iRW
+> * *Output Y:* oWE#
+
+*Chip 5: oOE# Gate* (Implements `oCE# OR iOD`)
+
+> * *Input C:* oCE#
+> * *Input B:* 0 (GND)
+> * *Input A:* iOD
+> * *Output Y:* oOE#
+
+By reusing `oCE#` from Chip 3, you can generate all three complex control signals using a total of five identical 74LVC1G58 packages without needing any dedicated inverters.
+
+'''
